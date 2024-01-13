@@ -1,6 +1,6 @@
 import "./App.css";
 import { useState } from "react";
-import { Helmet, HelmetProvider } from "react-helmet-async";
+import { Helmet } from "react-helmet";
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
 
 function Counter() {
@@ -56,14 +56,13 @@ function Home() {
 
 function App() {
   return (
-    <HelmetProvider>
+    // <HelmetProvider>
     <BrowserRouter>
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="counter" element={<Counter />} />
       </Routes>
     </BrowserRouter>
-    </HelmetProvider>
   );
 }
 
