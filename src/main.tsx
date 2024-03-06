@@ -1,24 +1,21 @@
-import React from 'react';
+import './index.css'
 import { createRoot, hydrateRoot } from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import App from './App';
 
-const rootElement = document.getElementById('root');
-const root = createRoot(rootElement!);
+const appElement = (
+	<BrowserRouter>
+		<HelmetProvider>
+				<App />
+		</HelmetProvider>
+	</BrowserRouter>
+);
 
-if (rootElement?.hasChildNodes()) {
-	console.log('hydrate');
 
-	hydrateRoot(
-		rootElement,
-		<React.StrictMode>
-			<App />
-		</React.StrictMode>
-	);
-} else {
-	console.log('render');
-	root.render(
-		<React.StrictMode>
-			<App />
-		</React.StrictMode>
-	);
-}
+const container = document.getElementById('root') as HTMLElement;
+const hasChildNodes = container?.hasChildNodes() ?? false;
+
+hasChildNodes
+	? hydrateRoot(container, appElement)
+	: createRoot(container).render(appElement);
