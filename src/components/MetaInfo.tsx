@@ -1,12 +1,20 @@
 import { Helmet } from 'react-helmet-async';
+import type { FunctionComponent } from 'react';
+import { getRouteMetaInfo, type MetaInfoProps } from '../config/routes.config';
+import { APP_NAME, BASE_URL, AUTHOR_NAME, DEFAULT_LANG, DEFAULT_LOCALE } from '../config/env.config';
 
-const MetaInfo = ({
+const {
+  title: DEFAULT_TITLE,
+  description: DEFAULT_DESCRIPTION
+} = getRouteMetaInfo('Home');
+
+const MetaInfo: FunctionComponent<MetaInfoProps> = ({
   meta = [],
   defer = false,
-  lang = 'en',
-  title = 'Home',
-  locale = 'en_US',
-  description = 'Home description'
+  lang = DEFAULT_LANG,
+  title = DEFAULT_TITLE,
+  locale = DEFAULT_LOCALE,
+  description = DEFAULT_DESCRIPTION
 }) => {
   const url = window?.location.href || 'unknown';
 
@@ -15,7 +23,7 @@ const MetaInfo = ({
       defer={defer}
       title={title}
       htmlAttributes={{ lang }}
-      titleTemplate={`Let's trip | %s`}
+      titleTemplate={`${APP_NAME} | %s`}
       link={[
         {
           rel: 'canonical',
@@ -37,7 +45,7 @@ const MetaInfo = ({
         },
         {
           property: 'og:site_name',
-          content: "Let's trip"
+          content: APP_NAME
         },
         {
           property: 'og:type',
@@ -53,11 +61,11 @@ const MetaInfo = ({
         },
         {
           property: 'og:image',
-          content: `https://www.bnf.fr/sites/default/files/2019-10/btv1b8457904c_f1.jpg`
+          content: `${BASE_URL}logo192.png`
         },
         {
           name: 'author',
-          content: 'Liildev'
+          content: AUTHOR_NAME
         }
       ].concat(meta)}
     />

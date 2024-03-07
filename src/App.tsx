@@ -1,48 +1,42 @@
-import "./App.css";
-import { useState } from "react";
-import { Link, Route, Routes } from "react-router-dom";
-import MetaInfo from "./seo";
+import Layout from './Layout';
+import type { FunctionComponent } from 'react';
+import { routes } from './config/routes.config';
+import { MetaInfo, NotFound404 } from './components';
+import { usePageTracker, useScrollToTop } from './hooks';
+import { useLocation, Route, Routes } from 'react-router-dom';
+import { CSSTransition, SwitchTransition } from 'react-transition-group';
 
-function Counter() {
-  const [count, setCount] = useState(0);
+const App: FunctionComponent = () => {
+  useScrollToTop();
+  usePageTracker();
+  const location = useLocation();
 
   return (
-    <div className="App">
-      <MetaInfo title="Counter" description="Counter description" />
-      <h3>Simple Vite SEO Demo - Counter page</h3>
-      <header className="App-header">
-        <p>
-          <button onClick={() => setCount((count) => count + 1)}>
-            count is: {count}
-          </button>
-        </p>
-        <p>Simple counter</p>
-        <Link to="/">Back to homepage</Link>
-      </header>
-    </div>
-  );
-}
-
-function Home() {
-  return (
-    <div className="App">
+    <Layout>
       <MetaInfo />
-
-      <h3>Simple Vite SEO Demo</h3>
-      <header className="App-header">
-        <Link to="/counter">Go to counter</Link>
-      </header>
-    </div>
+      <SwitchTransition mode="out-in">
+        <CSSTransition
+          timeout={250}
+          classNames="fade"
+          key={location.key}
+        >
+          <Routes location={location}>
+            {routes.map(({ path, Component }) => (
+              <Route
+                key={path}
+                path={path}
+                element={<Component />}
+              />
+            ))}
+            <Route
+              path="*"
+              element={<NotFound404 />}
+            />
+          </Routes>
+        </CSSTransition>
+      </SwitchTransition>
+    </Layout>
   );
-}
-
-function App() {
-  return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="counter" element={<Counter />} />
-    </Routes>
-  );
-}
+};
 
 export default App;
